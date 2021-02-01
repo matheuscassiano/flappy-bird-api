@@ -1,111 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './user';
+import { InjectRepository } from '@nestjs/typeorm';
+import { getConnection, Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
-  users: User[] = [
-    {
-      id: 1,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 7,
-      accessToken: '',
-    },
-    {
-      id: 2,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 3,
-      accessToken: '',
-    },
-    {
-      id: 3,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 4,
-      accessToken: '',
-    },
-    {
-      id: 4,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 5,
-      accessToken: '',
-    },
-    {
-      id: 5,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 6,
-      accessToken: '',
-    },
-    {
-      id: 6,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 2,
-      accessToken: '',
-    },
-    {
-      id: 7,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 1,
-      accessToken: '',
-    },
-  ];
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+  ) {}
 
-  getAll() {
-    return this.users;
+  getAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  getById(id: number) {
-    const user = this.users.find((value) => value.id == id);
-    return user;
+  getById(id: string): Promise<User> {
+    return this.usersRepository.findOne(id);
   }
 
-  create(user: User) {
-    let lastId = 0;
-    if (this.users.length > 0) {
-      lastId = this.users[this.users.length - 1].id;
-    }
+  async create(user: User) {
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values(user)
+      .execute();
 
-    user.id = lastId + 1;
-    this.users.push(user);
-
-    return user;
+    const result = await this.getById(user.id);
+    return result;
   }
 
-  update(user: User) {
-    const userArray = this.getById(user.id);
-    if (userArray) {
-      userArray.username = user.username;
-      userArray.email = user.email;
-      userArray.password = user.password;
-      userArray.accessToken = user.password;
-      userArray.lifes = user.lifes;
-      userArray.classification = user.classification;
-    }
+  async update(id: string, user: User) {
+    await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set(user)
+      .where('id = :id', { id: 1 })
+      .execute();
 
-    return userArray;
+    const result = await this.getById(user.id);
+    return result;
   }
 
-  delete(id: number) {
-    const index = this.users.findIndex((value) => value.id == id);
-    this.users.splice(index, 1);
+  async delete(id: string): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }
