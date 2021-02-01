@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { User } from './shared/user';
+import { User } from './shared/user.entity';
 import { UserService } from './shared/user.service';
 
 @Controller('users')
@@ -20,23 +20,22 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getById(@Param('id') id: number): Promise<User> {
+  async getById(@Param('id') id: string): Promise<User> {
     return this.userService.getById(id);
   }
 
-  @Post()
-  async create(@Body() user: User): Promise<User> {
-    return this.userService.create(user);
-  }
+  // @Post()
+  // async create(@Body() user: User): Promise<User> {
+  //   return this.userService.create(user);
+  // }
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() user: User): Promise<User> {
-    user.id = id;
-    return this.userService.update(user);
-  }
+  // @Put(':id')
+  // async update(@Param('id') id: string, @Body() user: User): Promise<User> {
+  //   return this.userService.update(user);
+  // }
 
   @Delete(':id')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id') id: string) {
     return this.userService.delete(id);
   }
 }

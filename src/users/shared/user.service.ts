@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './user';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+  ) {}
+
   users: User[] = [
     {
-      id: 1,
+      id: '1',
       username: 'matheuscassiano',
       email: 'matheuscassiano9@gmail.com',
       password: '',
@@ -13,99 +19,25 @@ export class UserService {
       classification: 7,
       accessToken: '',
     },
-    {
-      id: 2,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 3,
-      accessToken: '',
-    },
-    {
-      id: 3,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 4,
-      accessToken: '',
-    },
-    {
-      id: 4,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 5,
-      accessToken: '',
-    },
-    {
-      id: 5,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 6,
-      accessToken: '',
-    },
-    {
-      id: 6,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 2,
-      accessToken: '',
-    },
-    {
-      id: 7,
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 1,
-      accessToken: '',
-    },
   ];
 
-  getAll() {
-    return this.users;
+  getAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  getById(id: number) {
-    const user = this.users.find((value) => value.id == id);
-    return user;
+  getById(id: string): Promise<User> {
+    return this.usersRepository.findOne(id);
   }
 
-  create(user: User) {
-    let lastId = 0;
-    if (this.users.length > 0) {
-      lastId = this.users[this.users.length - 1].id;
-    }
+  // create(user: User) {
+  //   return user;
+  // }
 
-    user.id = lastId + 1;
-    this.users.push(user);
+  // update(user: User) {
+  //   return user;
+  // }
 
-    return user;
-  }
-
-  update(user: User) {
-    const userArray = this.getById(user.id);
-    if (userArray) {
-      userArray.username = user.username;
-      userArray.email = user.email;
-      userArray.password = user.password;
-      userArray.accessToken = user.password;
-      userArray.lifes = user.lifes;
-      userArray.classification = user.classification;
-    }
-
-    return userArray;
-  }
-
-  delete(id: number) {
-    const index = this.users.findIndex((value) => value.id == id);
-    this.users.splice(index, 1);
+  async delete(id: string): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }
