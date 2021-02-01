@@ -29,8 +29,16 @@ export class UserService {
     return result;
   }
 
-  update(user: User) {
-    return this.usersRepository.save(user);
+  async update(id: string, user: User) {
+    await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set(user)
+      .where('id = :id', { id: 1 })
+      .execute();
+
+    const result = await this.getById(user.id);
+    return result;
   }
 
   async delete(id: string): Promise<void> {
