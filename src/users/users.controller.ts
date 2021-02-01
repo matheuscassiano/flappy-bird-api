@@ -24,10 +24,10 @@ export class UsersController {
     return this.userService.getById(id);
   }
 
-  // @Post()
-  // async create(@Body() user: User): Promise<User> {
-  //   return this.userService.create(user);
-  // }
+  @Post()
+  async create(@Body() user: User): Promise<User> {
+    return this.userService.create(user);
+  }
 
   // @Put(':id')
   // async update(@Param('id') id: string, @Body() user: User): Promise<User> {

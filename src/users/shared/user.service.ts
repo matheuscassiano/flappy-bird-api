@@ -9,18 +9,6 @@ export class UserService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  users: User[] = [
-    {
-      id: '1',
-      username: 'matheuscassiano',
-      email: 'matheuscassiano9@gmail.com',
-      password: '',
-      lifes: 3,
-      classification: 7,
-      accessToken: '',
-    },
-  ];
-
   getAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
@@ -29,9 +17,9 @@ export class UserService {
     return this.usersRepository.findOne(id);
   }
 
-  // create(user: User) {
-  //   return user;
-  // }
+  create(user: User) {
+    return this.usersRepository.save(this.usersRepository.create(user));
+  }
 
   // update(user: User) {
   //   return user;
