@@ -17,6 +17,10 @@ export class UserService {
     return this.usersRepository.findOne(id);
   }
 
+  getByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({ email });
+  }
+
   async create(user: User) {
     await getConnection()
       .createQueryBuilder()

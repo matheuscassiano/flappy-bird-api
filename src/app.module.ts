@@ -18,6 +18,7 @@ import { User } from './users/shared/user.entity';
       synchronize: true,
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
