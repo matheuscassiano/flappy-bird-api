@@ -38,7 +38,7 @@ export class UserService {
       .createQueryBuilder()
       .update(User)
       .set(user)
-      .where('id = :id', { id: 1 })
+      .where('id = :id', { id })
       .execute();
 
     const result = await this.getById(user.id);
