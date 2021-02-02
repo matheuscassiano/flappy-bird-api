@@ -21,5 +21,5 @@ export class User {
   lifes: number;
 
   @Column()
-  classification: number;
+  points: number;
 }
