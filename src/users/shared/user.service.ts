@@ -17,6 +17,10 @@ export class UserService {
     return this.usersRepository.findOne(id);
   }
 
+  getByEmail(email: string): Promise<any> {
+    return this.usersRepository.findOne({ where: { email: email } });
+  }
+
   async create(user: User) {
     await getConnection()
       .createQueryBuilder()
@@ -34,7 +38,7 @@ export class UserService {
       .createQueryBuilder()
       .update(User)
       .set(user)
-      .where('id = :id', { id: 1 })
+      .where('id = :id', { id })
       .execute();
 
     const result = await this.getById(user.id);
