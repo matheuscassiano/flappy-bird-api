@@ -48,4 +48,10 @@ export class UserService {
   async delete(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
+
+  async registerPoints({ email, points}){
+    const user = await this.getByEmail(email);
+    user.points += points;
+    return this.update(user.id, user);
+  }
 }

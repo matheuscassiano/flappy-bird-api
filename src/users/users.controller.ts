@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   UseGuards,
@@ -23,6 +24,12 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('user/email')
+  async getByEmail(@Body() user: User): Promise<User[]> {
+    return await this.userService.getByEmail(user.email);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('users/:id')
   async getById(@Param('id') id: string): Promise<User> {
     return this.userService.getById(id);
@@ -33,8 +40,13 @@ export class UsersController {
     return this.userService.create(user);
   }
 
+  @Post('points')
+  async registerPoints(@Body() info: any) {
+    return this.userService.registerPoints(info);
+  }
+
   @UseGuards(JwtAuthGuard)
-  @Put('users/:id')
+  @Patch('users/:id')
   async update(@Param('id') id: string, @Body() user: User): Promise<User> {
     return this.userService.update(id, user);
   }
