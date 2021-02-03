@@ -52,6 +52,7 @@ export class UserService {
   async registerPoints({ email, points}){
     const user = await this.getByEmail(email);
     user.points += points;
+    user.lifes--;
     return this.update(user.id, user);
   }
 }
