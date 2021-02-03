@@ -51,7 +51,7 @@ export class UserService {
 
   async registerPoints({ email, points }) {
     const user = await this.getByEmail(email);
-    user.points += points;
+    user.points = user.points <= points ? points : user.points;
     user.lifes <= 0 ? (user.lifes = 0) : user.lifes--;
     return this.update(user.id, user);
   }
