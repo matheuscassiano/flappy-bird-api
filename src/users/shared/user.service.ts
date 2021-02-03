@@ -49,10 +49,10 @@ export class UserService {
     await this.usersRepository.delete(id);
   }
 
-  async registerPoints({ email, points}){
+  async registerPoints({ email, points }) {
     const user = await this.getByEmail(email);
     user.points += points;
-    user.lifes--;
+    user.lifes <= 0 ? (user.lifes = 0) : user.lifes--;
     return this.update(user.id, user);
   }
 }

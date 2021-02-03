@@ -24,7 +24,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('user/email')
+  @Post('user/email')
   async getByEmail(@Body() user: User): Promise<User[]> {
     return await this.userService.getByEmail(user.email);
   }
